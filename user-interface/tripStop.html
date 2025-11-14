@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV ChargeMap</title>
+    <link rel="stylesheet" href="styles/tripStop.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Create Trip</h2>
+        </div>
+        
+        <div class="content">
+            <div class="left-column">
+                <div class="left-section">
+                    <form>
+                        <label for="start-location">Start Location:</label>
+                        <input type="text" id="start-location" name="start-location" required>
+
+                        <label for="end-location">End Location:</label>
+                        <input type="number" id="end-location" name="end-location" required>
+
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
+                <div class="left-section">
+                    <!----stops table goes here-->
+
+                    <!-----car form goes here---->
+                </div>
+            </div>
+            
+            <div class="right-column">
+                <div class="right-box">
+                    <h2>Map</h2>
+                    <iframe src="test-maps/testMap.html" width="100%" height="100%"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
