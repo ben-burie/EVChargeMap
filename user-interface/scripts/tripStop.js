@@ -35,7 +35,7 @@ async function geocodeLocation(location) {
 }
 
 // Function to fetch intermediate stops from Flask
-async function fetchIntermediateStops(startLat, startLng, endLat, endLng, numPoints = 5) {
+async function fetchIntermediateStops(startLat, startLng, endLat, endLng) {
     try {
         const response = await fetch(FLASK_API_URL, {
             method: 'POST',
@@ -47,7 +47,6 @@ async function fetchIntermediateStops(startLat, startLng, endLat, endLng, numPoi
                 start_lng: startLng,
                 end_lat: endLat,
                 end_lng: endLng,
-                num_points: numPoints
             })
         });
 
@@ -98,7 +97,7 @@ function plotIntermediateStops(stops) {
                 weight: 2,
                 opacity: 1,
                 fillOpacity: 0.9
-            }).bindPopup(`${stop.name}<br>Distance: ${stop.distance}km`);
+            }).bindPopup(`${stop.name}<br>City: ${stop.city}, ${stop.state}`);
         }
 
         if (marker) {
