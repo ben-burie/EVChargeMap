@@ -7,6 +7,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 let routeControl;
+let intermediateMarkers = [];
+const FLASK_API_URL = 'http://localhost:5000/api/calculate-stations';
 
 // Function to geocode location name to coordinates
 async function geocodeLocation(location) {
@@ -30,6 +32,80 @@ async function geocodeLocation(location) {
         console.error('Geocoding error:', error);
         return null;
     }
+}
+
+// Function to fetch intermediate stops from Flask
+async function fetchIntermediateStops(startLat, startLng, endLat, endLng, numPoints = 5) {
+    try {
+        const response = await fetch(FLASK_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                start_lat: startLat,
+                start_lng: startLng,
+                end_lat: endLat,
+                end_lng: endLng,
+                num_points: numPoints
+            })
+        });
+
+        const data = await response.json();
+        
+        if (!data.success) {
+            console.error('Error from Flask:', data.error);
+            return [];
+        }
+
+        return data.stops;
+    } catch (error) {
+        console.error('Error fetching stops:', error);
+        return [];
+    }
+}
+
+// Function to clear intermediate markers
+function clearIntermediateMarkers() {
+    intermediateMarkers.forEach(marker => map.removeLayer(marker));
+    intermediateMarkers = [];
+}
+
+// Function to plot intermediate stops on map
+function plotIntermediateStops(stops) {
+    clearIntermediateMarkers();
+
+    stops.forEach((stop, index) => {
+        let marker;
+        
+        if (stop.type === 'checkpoint') {
+            // Checkpoints as light blue circles
+            marker = L.circleMarker([stop.lat, stop.lng], {
+                radius: 7,
+                fillColor: '#60a5fa',
+                color: '#fff',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.7
+            }).bindPopup(`${stop.name}`);
+        } 
+        else if (stop.type === 'station') {
+            // Stations as yellow/orange circles (larger)
+            marker = L.circleMarker([stop.lat, stop.lng], {
+                radius: 9,
+                fillColor: '#fbbf24',
+                color: '#fff',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.9
+            }).bindPopup(`${stop.name}<br>Distance: ${stop.distance}km`);
+        }
+
+        if (marker) {
+            marker.addTo(map);
+            intermediateMarkers.push(marker);
+        }
+    });
 }
 
 // Function to search route and display on map
@@ -68,6 +144,23 @@ async function searchRoute(event) {
         map.removeControl(routeControl);
     }
 
+    // Clear existing intermediate markers
+    clearIntermediateMarkers();
+
+    // Fetch intermediate stops from Flask
+    const stops = await fetchIntermediateStops(
+        startLocation.lat,
+        startLocation.lng,
+        endLocation.lat,
+        endLocation.lng,
+        5 // Number of intermediate points
+    );
+
+    // Plot intermediate stops
+    if (stops.length > 0) {
+        plotIntermediateStops(stops);
+    }
+
     // Create routing control with hidden panel
     routeControl = L.Routing.control({
         waypoints: [
@@ -81,8 +174,8 @@ async function searchRoute(event) {
             styles: [{ color: 'blue', opacity: 0.6, weight: 4 }]
         },
         createMarker: function(i, wp, nWps) {
-            let markerColor = i === 0 ? 'green' : i === nWps - 1 ? 'red' : 'blue';
-            return L.marker(wp.latLng, {
+            let markerColor = i === 0 ? '#22c55e' : i === nWps - 1 ? '#ef4444' : '#3b82f6';
+            return L.circleMarker(wp.latLng, {
                 radius: 10,
                 fillColor: markerColor,
                 color: '#fff',
@@ -100,7 +193,7 @@ async function searchRoute(event) {
     );
     map.fitBounds(bounds, { padding: [50, 50] });
 
-    messageDiv.innerHTML = '<div class="message success">Route displayed!</div>';
+    messageDiv.innerHTML = '<div class="message success">Route displayed with stops!</div>';
 }
 
 // Allow Enter key to trigger search
