@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV ChargeMap</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.min.css" />
+    <link rel="stylesheet" href="styles/tripStop.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Create Trip</h2>
+        </div>
+        
+        <div class="content">
+            <div class="left-column">
+                <div class="left-section">
+                    <form onsubmit="searchRoute(event)">
+                        <label for="start-location">Start Location:</label>
+                        <input type="text" id="start-location" name="start-location" required>
+
+                        <label for="end-location">End Location:</label>
+                        <input type="text" id="end-location" name="end-location" required>
+
+                        <button type="submit">Search</button>
+                    </form>
+                    <div id="message"></div>
+                </div>
+                <div class="left-section">
+                    <!-- stops table goes here -->
+                    <!-- car form goes here -->
+                </div>
+            </div>
+            
+            <div class="right-column">
+                <div class="right-box">
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="scripts/tripStop.js"></script>
+</body>
+</html>
