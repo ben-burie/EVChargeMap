@@ -3,12 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EV ChargeMap</title>
-    <link rel="stylesheet" href="styles/cars.css">
+    <title>Login / Create Account</title>
+    <!-- point to user-interface/styles/logon.css -->
+    <link rel="stylesheet" href="styles/logon.css">
 </head>
 <body>
-    
 
-    <script src="scripts/cars.js"></script>
+    <div class="page-title">Login / Create Account Page</div>
+    
+    <div class="container">
+        <div class="header">Login</div>
+        
+        <div class="tab-buttons">
+            <button class="tab-btn active" id="loginTab" type="button">Login</button>
+            <button class="tab-btn" id="createTab" type="button">Create Account</button>
+        </div>
+        
+        <!-- Login Form -->
+        <div class="form-section" id="loginForm">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" autocomplete="username">
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" autocomplete="current-password">
+            </div>
+        </div>
+        
+        <!-- Create Account Form -->
+        <div class="form-section hidden" id="createForm">
+            <div class="input-group">
+                <label for="newUsername">Username</label>
+                <input type="text" id="newUsername" autocomplete="username">
+            </div>
+            
+            <div class="input-group">
+                <label for="newPassword">Password</label>
+                <input type="password" id="newPassword" autocomplete="new-password">
+            </div>
+            
+            <div class="input-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" autocomplete="new-password">
+            </div>
+        </div>
+        
+        <button class="submit-btn" type="button">Submit</button>
+    </div>
+    
+    <!-- point to user-interface/scripts/logon.js -->
+    <script src="scripts/logon.js"></script>
 </body>
 </html>

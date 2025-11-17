@@ -32,6 +32,26 @@
                 </div>
                 <div class="left-section">
                     <!-- stops table goes here -->
+                     <div class="stops-container">
+                        <div class="stops-input-group">
+                            <input 
+                                type="text" 
+                                id="stop-city-input" 
+                                placeholder="Enter station ID..."
+                            >
+                            <button onclick="addStop()">Add</button>
+                        </div>
+                        <table class="stops-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Stops</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stops-tbody">
+                                <!-- stops will be added here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
                     <!-- car form goes here -->
                 </div>
             </div>
