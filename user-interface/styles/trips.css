@@ -55,6 +55,7 @@ body {
 .btn {
     padding: 8px 16px;
     border: 2px solid #333;
+    border-radius: 8px;
     background-color: #e0e0e0;
     cursor: pointer;
     font-size: 14px;
