@@ -4,11 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EV ChargeMap</title>
-    <link rel="stylesheet" href="styles/cars.css">
+    <link rel="stylesheet" href="styles/trips.css">
 </head>
 <body>
-    
+    <div class="container">
+        <header class="page-header">
+            <h1>Trips Home Page</h1>
+        </header>
 
-    <script src="scripts/cars.js"></script>
+        <div class="trips-section">
+            <div class="section-header">
+                <h2>My Trips</h2>
+                <div class="header-buttons">
+                    <button class="btn btn-secondary" id="myCarsBtn">My Cars</button>
+                    <button class="btn btn-secondary" id="logOutBtn">Log Out</button>
+                </div>
+            </div>
+
+            <table class="trips-table">
+                <thead>
+                    <tr>
+                        <th>Trip ID</th>
+                        <th>Start Location</th>
+                        <th>End Location</th>
+                    </tr>
+                </thead>
+                <tbody id="tripsTableBody">
+                    <!-- Trips will be dynamically added here -->
+                </tbody>
+            </table>
+
+            <button class="btn btn-primary" id="createNewTripBtn">Create New Trip</button>
+        </div>
+    </div>
+
+    <script src="scripts/trips.js"></script>
+
 </body>
 </html>
