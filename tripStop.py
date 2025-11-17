@@ -2,7 +2,7 @@ import math
 import csv
 import os
 
-STATIONS = [] #test
+STATIONS = []
 
 def load_stations(filename='us_stations_test.csv'):
     """Load all stations from CSV file once at startup"""
