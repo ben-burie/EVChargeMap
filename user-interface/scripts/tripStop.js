@@ -201,3 +201,42 @@ document.getElementById('end-location').addEventListener('keypress', function(ev
         searchRoute(event);
     }
 });
+
+
+// STATION TABLE LOGIC BELOW
+const stops = [];
+
+function addStop() {
+    const input = document.getElementById('stop-city-input');
+    const city = input.value.trim();
+
+    if (!city) {
+        alert('Please enter a city name');
+        return;
+    }
+
+    stops.push(city);
+    input.value = '';
+    renderStops();
+    input.focus();
+}
+
+function renderStops() {
+    const tbody = document.getElementById('stops-tbody');
+    tbody.innerHTML = '';
+
+    stops.forEach((city, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td class="stop-number">${index + 1}</td>
+            <td>Station ## - ${city}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+document.getElementById('stop-city-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        addStop();
+    }
+});

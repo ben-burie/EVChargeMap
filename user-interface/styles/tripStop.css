@@ -76,7 +76,7 @@ input:focus {
     box-shadow: #924fa7;
 }
 
-button {
+button, .stops-input-group button {
     padding: 10px 16px;
     background-color: #9863a8;
     color: white;
@@ -88,7 +88,7 @@ button {
     margin-top: 10px;
 }
 
-button:hover {
+button:hover, .stops-input-group button:hover {
     background-color: #9863a8;
 }
 
@@ -142,3 +142,51 @@ button:hover {
 .leaflet-routing-error {
     display: none !important;
 }
+
+/* TRIP STOP STYLES */
+.stops-container {
+    margin-top: 15px;
+}
+
+.stops-input-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.stops-input-group input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.stops-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+}
+
+.stops-table th {
+    background-color: #f0f0f0;
+    padding: 12px;
+    text-align: left;
+    font-weight: bold;
+    border: 2px solid #333;
+}
+
+.stops-table td {
+    padding: 12px;
+    border: 1px solid #999;
+}
+
+.stops-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.stop-number {
+    width: 40px;
+    text-align: center;
+    font-weight: bold;
+}   
