@@ -88,6 +88,10 @@ button, .stops-input-group button {
     margin-top: 10px;
 }
 
+.stops-input-group button {
+    margin-top: 0;
+}
+
 button:hover, .stops-input-group button:hover {
     background-color: #9863a8;
 }
@@ -156,10 +160,6 @@ button:hover, .stops-input-group button:hover {
 
 .stops-input-group input {
     flex: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
 }
 
 .stops-table {
