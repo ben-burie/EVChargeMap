@@ -4,7 +4,11 @@ import os
 
 STATIONS = []
 
-def load_stations(filename='us_stations_test.csv'):
+def load_cars(): # Change this function with SQL
+    cars = ["Tesla Model 3", "Nissan Leaf", "Chevrolet Bolt EV", "Ford Mustang Mach-E", "Test"]
+    return cars
+
+def load_stations(filename='us_stations_test.csv'): # Change this function with SQL
     """Load all stations from CSV file once at startup"""
     global STATIONS
     if os.path.exists(filename):
@@ -18,12 +22,14 @@ def load_stations(filename='us_stations_test.csv'):
                         station_name = row[1] if len(row) > 1 else 'Unknown'
                         station_city = row[2] if len(row) > 2 else 'Unknown'
                         station_state = row[4] if len(row) > 4 else 'Unknown'
+                        station_id = row[0] if len(row) > 0 else 'Unknown'
                         STATIONS.append({
                             'lat': station_lat,
                             'lng': station_lng,
                             'name': station_name,
                             'city': station_city,
-                            'state': station_state
+                            'state': station_state,
+                            'id': station_id
                         })
                     except (ValueError, IndexError):
                         continue
@@ -83,6 +89,7 @@ def calculate_intermediate_points(start_lat, start_lng, end_lat, end_lng):
                 'name': station['name'],
                 'city': station['city'],
                 'state': station['state'],
+                'id': station['id'],
                 'distance': round(distance, 2)
             })
 

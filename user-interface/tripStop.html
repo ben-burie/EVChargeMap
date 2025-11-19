@@ -42,17 +42,29 @@
                             <button onclick="addStop()">Add</button>
                         </div>
                         <table class="stops-table">
-                            <thead>
-                                <tr>
-                                    <th colspan="2">Stops</th>
-                                </tr>
-                            </thead>
-                            <tbody id="stops-tbody">
-                                <!-- stops will be added here dynamically -->
-                            </tbody>
-                        </table>
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;">#</th>
+                                <th>Station Name</th>
+                                <th>Location</th>
+                                <th style="width: 80px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stops-tbody">
+                            <!-- stops will be added here dynamically -->
+                        </tbody>
+                    </table>
                     </div>
                     <!-- car form goes here -->
+                     <div class="car-form-container">
+                        <div class="car-form-group">
+                            <label for="car-select">Car:</label>
+                            <select id="car-select">
+                                <option value="">Select a car...</option>
+                            </select>
+                            <button onclick="saveCar()">Save</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             
