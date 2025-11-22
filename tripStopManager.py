@@ -103,3 +103,6 @@ def calculate_intermediate_points(start_lat, start_lng, end_lat, end_lng):
     })
 
     return points
+
+def saveTrip(trip_data): # Change this function to write trip data to SQL database
+    print("Trip data saved (mock):", trip_data)
