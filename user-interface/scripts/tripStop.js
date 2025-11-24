@@ -1,4 +1,5 @@
 const map = L.map('map').setView([39.8283, -98.5795], 4);
+let allStops = []; // To store all stops fetched from Flask
 
 // Add OpenStreetMap tiles
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -8,7 +9,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 let routeControl;
 let intermediateMarkers = [];
-const FLASK_API_URL = 'http://localhost:5000/api/calculate-stations';
+const STATION_ENDPOINT_URL = 'http://localhost:5000/api/calculate-stations';
+const CAR_ENDPOINT_URL = 'http://localhost:5000/api/get-cars';
 
 // Function to geocode location name to coordinates
 async function geocodeLocation(location) {
@@ -37,7 +39,7 @@ async function geocodeLocation(location) {
 // Function to fetch intermediate stops from Flask
 async function fetchIntermediateStops(startLat, startLng, endLat, endLng) {
     try {
-        const response = await fetch(FLASK_API_URL, {
+        const response = await fetch(STATION_ENDPOINT_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -57,6 +59,7 @@ async function fetchIntermediateStops(startLat, startLng, endLat, endLng) {
             return [];
         }
 
+        allStops = data.stops; // Store all stops for later use
         return data.stops;
     } catch (error) {
         console.error('Error fetching stops:', error);
@@ -97,7 +100,7 @@ function plotIntermediateStops(stops) {
                 weight: 2,
                 opacity: 1,
                 fillOpacity: 0.9
-            }).bindPopup(`${stop.name}<br>City: ${stop.city}, ${stop.state}`);
+            }).bindPopup(`${stop.name}<br>City: ${stop.city}, ${stop.state}<br>Station ID: ${stop.id}`);
         }
 
         if (marker) {
@@ -204,39 +207,113 @@ document.getElementById('end-location').addEventListener('keypress', function(ev
 
 
 // STATION TABLE LOGIC BELOW
-const stops = [];
+const tripStops = [];
 
 function addStop() {
     const input = document.getElementById('stop-city-input');
-    const city = input.value.trim();
+    const id = input.value.trim();
 
-    if (!city) {
-        alert('Please enter a city name');
+    if (!id) {
+        alert('Please enter a station ID');
         return;
     }
 
-    stops.push(city);
-    input.value = '';
-    renderStops();
-    input.focus();
+    // Search through stops to find matching ID
+    const station = allStops.find(stop => stop.id === id);
+    if (station) {
+        tripStops.push(station);
+        input.value = '';
+        renderStops();
+        input.focus();
+    }
+    else {
+        alert('Station ID not found');
+    }
 }
 
 function renderStops() {
     const tbody = document.getElementById('stops-tbody');
     tbody.innerHTML = '';
-
-    stops.forEach((city, index) => {
+    
+    tripStops.forEach((station, index) => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td class="stop-number">${index + 1}</td>
-            <td>Station ## - ${city}</td>
+            <td class="stop-name">${station.name}</td>
+            <td class="stop-location">${station.city}, ${station.state}</td>
+            <td class="stop-actions"><button onclick="removeStop(${index})" class="remove-btn">Remove</button></td>
         `;
         tbody.appendChild(row);
     });
+}
+
+function removeStop(index) {
+    tripStops.splice(index, 1);
+    renderStops();
 }
 
 document.getElementById('stop-city-input').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         addStop();
     }
+});
+
+// CAR DROPDOWN LOGIC BELOW
+async function fetchCars() {
+    try {
+        const response = await fetch(CAR_ENDPOINT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        });
+
+        const data = await response.json();
+        
+        if (!data.success) {
+            console.error('Error from Flask:', data.error);
+            return [];
+        }
+
+        return Array.isArray(data.cars) ? data.cars : data;
+    } catch (error) {
+        console.error('Error fetching stops:', error);
+        return [];
+    }
+}
+
+let selectedCar = null;
+
+async function initializeCars() {
+    const select = document.getElementById('car-select');
+    select.innerHTML = '<option value="">Select a car...</option>';
+
+    cars = await fetchCars();
+    
+    cars.forEach(car => {
+        const option = document.createElement('option');
+        option.value = typeof car === 'string' ? car : car.name;
+        option.textContent = typeof car === 'string' ? car : car.name;
+        select.appendChild(option);
+    });
+}
+
+function saveCar() {
+    const select = document.getElementById('car-select');
+    const selectedValue = select.value;
+
+    if (!selectedValue) {
+        alert('Please select a car');
+        return;
+    }
+
+    selectedCar = selectedValue;
+    console.log('Car saved:', selectedCar);
+    alert('Car saved: ' + selectedCar);
+}
+
+// Initialize cars on page load
+window.addEventListener('load', () => {
+    initializeCars();
 });

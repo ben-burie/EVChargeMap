@@ -37,6 +37,21 @@ def calculate_stops():
             'success': False,
             'error': str(e)
         }), 400
+    
+@app.route('/api/get-cars', methods=['POST'])
+def get_cars():
+    """Return list of available car models"""
+    try:
+        cars = tripStop.load_cars()
+        return jsonify({
+            'success': True,
+            'cars': cars
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
 
 @app.route('/api/health', methods=['GET'])
 def health():
