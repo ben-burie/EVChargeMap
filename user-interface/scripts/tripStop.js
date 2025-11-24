@@ -11,6 +11,7 @@ let routeControl;
 let intermediateMarkers = [];
 const STATION_ENDPOINT_URL = 'http://localhost:5000/api/calculate-stations';
 const CAR_ENDPOINT_URL = 'http://localhost:5000/api/get-cars';
+const TRIP_ENDPOINT_URL = 'http://localhost:5000/api/create-trip';
 
 // Function to geocode location name to coordinates
 async function geocodeLocation(location) {
@@ -195,6 +196,18 @@ async function searchRoute(event) {
     );
     map.fitBounds(bounds, { padding: [50, 50] });
 
+    window.startLocation = {
+        name: startLocation.name,
+        lat: startLocation.lat,
+        lng: startLocation.lng
+    };
+
+    window.endLocation = {
+        name: endLocation.name,
+        lat: endLocation.lat,
+        lng: endLocation.lng
+    };
+
     messageDiv.innerHTML = '<div class="message success">Route displayed with stops!</div>';
 }
 
@@ -220,14 +233,14 @@ function addStop() {
 
     // Search through stops to find matching ID
     const station = allStops.find(stop => stop.id === id);
-    if (station) {
+    if (station && tripStops.includes(station) === false) {
         tripStops.push(station);
         input.value = '';
         renderStops();
         input.focus();
     }
     else {
-        alert('Station ID not found');
+        alert('Station ID not found or already added!');
     }
 }
 
@@ -317,3 +330,77 @@ function saveCar() {
 window.addEventListener('load', () => {
     initializeCars();
 });
+
+// SEND TRIP DATA TO BACKEND
+async function createTrip() {
+    if (tripStops.length === 0) {
+        alert('Please add at least one stop to your trip');
+        return;
+    }
+
+    if (!selectedCar) {
+        alert('Please select a car before creating a trip');
+        return;
+    }
+
+    if (!startLocation || !endLocation) {
+        alert('Please search for a route with start and end locations first');
+        return;
+    }
+
+    const tripData = {
+        start_location: {
+            name: startLocation.name,
+            lat: startLocation.lat,
+            lng: startLocation.lng
+        },
+        end_location: {
+            name: endLocation.name,
+            lat: endLocation.lat,
+            lng: endLocation.lng
+        },
+        stops: tripStops.map((stop, index) => ({
+            order: index + 1,
+            id: stop.id,
+            name: stop.name,
+            city: stop.city,
+            state: stop.state,
+            lat: stop.lat,
+            lng: stop.lng,
+            type: stop.type
+        })),
+        car: selectedCar,
+        total_stops: tripStops.length,
+        created_at: new Date().toISOString()
+    };
+
+    try {
+        const response = await fetch(TRIP_ENDPOINT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(tripData)
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+            alert('Error creating trip: ' + result.error);
+            return;
+        }
+
+        alert('Trip created successfully!');
+        console.log('Trip created:', result);
+        
+        // Reset trip data
+        tripStops.length = 0;
+        selectedCar = null;
+        document.getElementById('car-select').value = '';
+        renderStops();
+
+    } catch (error) {
+        console.error('Error creating trip:', error);
+        alert('Error creating trip: ' + error.message);
+    }
+}
