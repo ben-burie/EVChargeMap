@@ -266,7 +266,8 @@ function addStop() {
     }
 
     // Search through stops to find matching ID
-    const station = allStops.find(stop => stop.id === id);
+    console.log(id);
+    const station = allStops.find(stop => stop.id == id);
     if (station && tripStops.includes(station) === false) {
         tripStops.push(station);
         input.value = '';

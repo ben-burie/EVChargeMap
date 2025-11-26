@@ -15,9 +15,10 @@ connection = mysql.connector.connect(
     database=os.getenv('DB_NAME')
 )
 
+cursor = connection.cursor()
+
 def load_cars(): # Change the stored procedure later so that it only pulls cars that the user owns
     cars = []
-    cursor = connection.cursor()
 
     cursor.callproc('LoadAllCars')
     for result in cursor.stored_results():
@@ -26,38 +27,35 @@ def load_cars(): # Change the stored procedure later so that it only pulls cars 
             car = row[0] + " " + row[1]
             cars.append(car)
 
-    cursor.close()
-    connection.close()
     return cars
 
 def load_stations(filename='us_stations_test.csv'): # Change this function with SQL
-    """Load all stations from CSV file once at startup"""
-    global STATIONS
-    if os.path.exists(filename):
-        try:
-            with open(filename, mode='r') as file:
-                csv_reader = csv.reader(file)
-                for row in csv_reader:
-                    try:
-                        station_lat = float(row[5])
-                        station_lng = float(row[6])
-                        station_name = row[1] if len(row) > 1 else 'Unknown'
-                        station_city = row[2] if len(row) > 2 else 'Unknown'
-                        station_state = row[4] if len(row) > 4 else 'Unknown'
-                        station_id = row[0] if len(row) > 0 else 'Unknown'
-                        STATIONS.append({
-                            'lat': station_lat,
-                            'lng': station_lng,
-                            'name': station_name,
-                            'city': station_city,
-                            'state': station_state,
-                            'id': station_id
-                        })
-                    except (ValueError, IndexError):
-                        continue
-            print(f"Loaded {len(STATIONS)} stations")
-        except Exception as e:
-            print(f"Error loading stations: {e}")
+
+    cursor.callproc('LoadAllUSStations')
+    
+    for result in cursor.stored_results():
+        print(result)
+        rows = result.fetchall()
+        for row in rows:
+            try:
+                station_lat = float(row[4])
+                station_lng = float(row[5])
+                station_name = row[1] if len(row) > 1 else 'Unknown'
+                station_city = row[2] if len(row) > 2 else 'Unknown'
+                station_state = row[3] if len(row) > 4 else 'Unknown'
+                station_id = row[0] if len(row) > 0 else 'Unknown'
+                STATIONS.append({
+                    'lat': station_lat,
+                    'lng': station_lng,
+                    'name': station_name,
+                    'city': station_city,
+                    'state': station_state,
+                    'id': station_id
+                })
+            except (ValueError, IndexError):
+                continue
+
+    print(f"Loaded {len(STATIONS)} stations from database")
 
 def distance_point_to_line(point_lat, point_lng, line_start_lat, line_start_lng, line_end_lat, line_end_lng):
     km_per_degree = 111.0

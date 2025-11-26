@@ -12,10 +12,6 @@ CORS(app)
 
 @app.route('/api/calculate-stations', methods=['POST'])
 def calculate_stops():
-    """
-    Receive start and end coordinates, calculate intermediate stations,
-    and return all points.
-    """
     try:
         data = request.json
         
@@ -40,7 +36,7 @@ def calculate_stops():
             'success': False,
             'error': str(e)
         }), 400
-    
+      
 @app.route('/api/get-cars', methods=['POST'])
 def get_cars():
     """Return list of available car models"""
