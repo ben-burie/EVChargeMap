@@ -1,11 +1,33 @@
 import math
 import csv
+import mysql.connector
+from dotenv import load_dotenv
 import os
 
 STATIONS = []
 
-def load_cars(): # Change this function with SQL
-    cars = ["Tesla Model 3", "Nissan Leaf", "Chevrolet Bolt EV", "Ford Mustang Mach-E", "Test"]
+load_dotenv()
+
+connection = mysql.connector.connect(
+    host=os.getenv('DB_HOST'),
+    user=os.getenv('DB_USER'),
+    password=os.getenv('DB_PASSWORD'),
+    database=os.getenv('DB_NAME')
+)
+
+def load_cars(): # Change the stored procedure later so that it only pulls cars that the user owns
+    cars = []
+    cursor = connection.cursor()
+
+    cursor.callproc('LoadAllCars')
+    for result in cursor.stored_results():
+        rows = result.fetchall()
+        for row in rows:
+            car = row[0] + " " + row[1]
+            cars.append(car)
+
+    cursor.close()
+    connection.close()
     return cars
 
 def load_stations(filename='us_stations_test.csv'): # Change this function with SQL

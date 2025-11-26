@@ -9,6 +9,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 let routeControl;
 let intermediateMarkers = [];
+let routeCoordinates = [];
+
 const STATION_ENDPOINT_URL = 'http://localhost:5000/api/calculate-stations';
 const CAR_ENDPOINT_URL = 'http://localhost:5000/api/get-cars';
 const TRIP_ENDPOINT_URL = 'http://localhost:5000/api/create-trip';
@@ -35,6 +37,38 @@ async function geocodeLocation(location) {
         console.error('Geocoding error:', error);
         return null;
     }
+}
+
+function extractRouteCoordinates(routeControl) {
+    routeCoordinates = [];
+    
+    if (!routeControl || !routeControl.getWaypoints) {
+        console.error('Route control not available');
+        return [];
+    }
+    
+    // Get the route lines
+    const routes = routeControl.getRoutes();
+    
+    if (routes.length === 0) {
+        console.error('No routes found');
+        return [];
+    }
+    
+    // Extract coordinates from all route segments
+    routes.forEach((route, routeIndex) => {
+        if (route.coordinates && route.coordinates.length > 0) {
+            route.coordinates.forEach((coord) => {
+                routeCoordinates.push({
+                    lat: coord.lat,
+                    lng: coord.lng
+                });
+            });
+        }
+    });
+    
+    console.log(`Extracted ${routeCoordinates.length} coordinate points from route`);
+    return routeCoordinates;
 }
 
 // Function to fetch intermediate stops from Flask
