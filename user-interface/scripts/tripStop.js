@@ -385,8 +385,10 @@ async function createTrip() {
 
     let startLocationDetails = document.getElementById('start-location').value.trim().toUpperCase();
     let endLocationDetails = document.getElementById('end-location').value.trim().toUpperCase();
+    let tripName = document.getElementById('trip-name').value.trim().toUpperCase();
 
     const tripData = {
+        name: tripName,
         start_location: {
             name: startLocation.name,
             lat: startLocation.lat,
@@ -435,7 +437,10 @@ async function createTrip() {
         // Reset trip data
         tripStops.length = 0;
         selectedCar = null;
+        document.getElementById('start-location').value = '';
+        document.getElementById('end-location').value = '';
         document.getElementById('car-select').value = '';
+        document.getElementById('trip-name').value = '';
         renderStops();
 
     } catch (error) {

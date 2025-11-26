@@ -268,3 +268,8 @@ button:hover, .stops-input-group button:hover {
 .car-form-group button:hover {
     background-color: #c9a8d8;
 }
+
+.save-trip {
+    margin-top: 50px;
+    text-align: center;
+}

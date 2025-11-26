@@ -15,12 +15,11 @@ cursor = connection.cursor()
 
 def saveTrip(trip_data):
     car_id = getCarID(trip_data.get('car'))
-    print("Car ID: ", car_id)
 
     result = cursor.callproc('CreateTrip', [
         1, # Mock user ID
         car_id,
-        "test_trip", # Mock trip name
+        trip_data.get('name'), # Mock trip name
         trip_data.get('start_location').get('location'), #start location
         trip_data.get('end_location').get('location'), #end location
         0 #out parameter placeholder
@@ -28,7 +27,7 @@ def saveTrip(trip_data):
 
     trip_ID = result[-1]
     saveTripStop(trip_ID, trip_data.get('stops'))
-    
+
     connection.commit()
 
 def saveTripStop(trip_id, stop_data):

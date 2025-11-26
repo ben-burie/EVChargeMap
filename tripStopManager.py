@@ -28,8 +28,7 @@ def load_cars(): # Change the stored procedure later so that it only pulls cars 
 
     return cars
 
-def load_stations(): # Change this function with SQL
-
+def load_stations():
     cursor.callproc('LoadAllUSStations')
     
     for result in cursor.stored_results():
