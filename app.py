@@ -60,7 +60,7 @@ def create_trip():
         stops = data.get('stops')
         car = data.get('car')
 
-        tripStopManager.saveTrip(data)
+        tripManager.saveTrip(data)
         
         return jsonify({
             'success': True,
@@ -83,5 +83,5 @@ def health():
     return jsonify({'status': 'ok'})
 
 if __name__ == '__main__':
-    tripStopManager.load_stations('us_stations_test.csv')
+    tripStopManager.load_stations()
     app.run(debug=True, port=5000)

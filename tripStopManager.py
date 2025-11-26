@@ -1,5 +1,4 @@
 import math
-import csv
 import mysql.connector
 from dotenv import load_dotenv
 import os
@@ -29,7 +28,7 @@ def load_cars(): # Change the stored procedure later so that it only pulls cars 
 
     return cars
 
-def load_stations(filename='us_stations_test.csv'): # Change this function with SQL
+def load_stations(): # Change this function with SQL
 
     cursor.callproc('LoadAllUSStations')
     
@@ -123,6 +122,3 @@ def calculate_intermediate_points(start_lat, start_lng, end_lat, end_lng):
     })
 
     return points
-
-def saveTrip(trip_data): # Change this function to write trip data to SQL database
-    print("Trip data saved (mock):", trip_data)

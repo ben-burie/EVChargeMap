@@ -383,16 +383,21 @@ async function createTrip() {
         return;
     }
 
+    let startLocationDetails = document.getElementById('start-location').value.trim().toUpperCase();
+    let endLocationDetails = document.getElementById('end-location').value.trim().toUpperCase();
+
     const tripData = {
         start_location: {
             name: startLocation.name,
             lat: startLocation.lat,
-            lng: startLocation.lng
+            lng: startLocation.lng,
+            location: startLocationDetails
         },
         end_location: {
             name: endLocation.name,
             lat: endLocation.lat,
-            lng: endLocation.lng
+            lng: endLocation.lng,
+            location: endLocationDetails
         },
         stops: tripStops.map((stop, index) => ({
             order: index + 1,
@@ -426,7 +431,6 @@ async function createTrip() {
         }
 
         alert('Trip created successfully!');
-        console.log('Trip created:', result);
         
         // Reset trip data
         tripStops.length = 0;
