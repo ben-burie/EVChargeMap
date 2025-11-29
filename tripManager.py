@@ -55,3 +55,10 @@ def getCarID(car_name):
                     if rows:
                         car_id = rows[0][0]
     return car_id
+
+def load_user_trips():
+    trips = []
+
+    # Call stored procedure to load trips for the userID that is logged in currently
+
+    return trips

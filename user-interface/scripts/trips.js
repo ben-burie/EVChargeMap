@@ -72,6 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+function openTripStop() {
+    window.location.href = 'tripStop.html';
+}
+
 // Example of how to add trips programmatically (for future use)
 // addTrip({
 //     id: '43521',

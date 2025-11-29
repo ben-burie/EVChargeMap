@@ -387,6 +387,11 @@ async function createTrip() {
     let endLocationDetails = document.getElementById('end-location').value.trim().toUpperCase();
     let tripName = document.getElementById('trip-name').value.trim().toUpperCase();
 
+    if (!tripName) {
+        alert('Please enter a name for your trip');
+        return;
+    }
+
     const tripData = {
         name: tripName,
         start_location: {

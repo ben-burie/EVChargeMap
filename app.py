@@ -20,7 +20,6 @@ def calculate_stops():
         end_lat = float(data.get('end_lat'))
         end_lng = float(data.get('end_lng'))
         
-        # Calculate intermediate points
         stops = tripStopManager.calculate_intermediate_points(
             start_lat, start_lng, end_lat, end_lng
         )
@@ -39,7 +38,6 @@ def calculate_stops():
       
 @app.route('/api/get-cars', methods=['POST'])
 def get_cars():
-    """Return list of available car models"""
     try:
         cars = tripStopManager.load_cars()
         return jsonify({
@@ -54,7 +52,6 @@ def get_cars():
     
 @app.route('/api/create-trip', methods=['POST'])
 def create_trip():
-    """Receive trip data and store it (mock implementation)"""
     try:
         data = request.json
         stops = data.get('stops')
@@ -70,6 +67,73 @@ def create_trip():
                 'car': car
             }
         })
+    
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    
+@app.route('/api/get-trips', methods=['POST'])
+def get_trips():
+    try: 
+        trips = tripManager.load_user_trips()
+        return jsonify({
+            'success': True,
+            'trips': trips
+        })
+    
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    
+@app.route('/api/login', methods=['POST'])
+def login():
+    try:
+        data = request.json
+        username = data.get('username')
+        password = data.get('password')
+        
+        user = userManager.authenticate_user(username, password)
+        
+        if user:
+            return jsonify({
+                'success': True,
+                'user': user
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'error': 'Invalid username or password'
+            }), 401
+    
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    
+@app.route('/api/register', methods=['POST'])
+def register():
+    try:
+        data = request.json
+        username = data.get('username')
+        password = data.get('password')
+        
+        result = userManager.register_user(username, password)
+        
+        if result:
+            return jsonify({
+                'success': True,
+                'message': 'User registered successfully'
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'error': 'Registration failed'
+            }), 400
     
     except Exception as e:
         return jsonify({

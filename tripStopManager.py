@@ -99,7 +99,7 @@ def calculate_intermediate_points(start_lat, start_lng, end_lat, end_lng):
             station['lat'], station['lng'],
             start_lat, start_lng, end_lat, end_lng
         )
-        if distance < 100:  # 100 km search radius (can change this if needed)
+        if distance < 100:  # 100 km search radius
             points.append({
                 'lat': station['lat'],
                 'lng': station['lng'],
