@@ -50,6 +50,28 @@ def get_cars():
             'error': str(e)
         }), 400
     
+@app.route('/api/add-car', methods=['POST'])
+def add_car():
+    try:
+        data = request.json
+        car_name = data.get('name')
+
+        carManager.save_car(car_name)
+        
+        return jsonify({
+            'success': True,
+            'message': 'Car added successfully',
+            'car': {
+                'name': car_name
+            }
+        })
+    
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    
 @app.route('/api/create-trip', methods=['POST'])
 def create_trip():
     try:

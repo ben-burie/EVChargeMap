@@ -41,6 +41,25 @@
         </div>
     </div>
 
+    <div id="addCarModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Car to Your Account</h2>
+                <span class="close" id="closeModalBtn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <label for="addCarDropdown">Select a Car:</label>
+                <select id="addCarDropdown" class="car-dropdown">
+                    <option value="">Select a car</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                <button class="btn btn-primary" id="confirmAddBtn">Add Car</button>
+            </div>
+        </div>
+    </div>
+
     <script src="scripts/cars.js"></script>
 </body>
 </html>

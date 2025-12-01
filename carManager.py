@@ -24,3 +24,5 @@ def load_cars(): # Change the stored procedure later so that it only pulls cars 
             cars.append({'name': car})
 
     return cars
+
+#def save_car(car_name): # Save car to the database

@@ -8,7 +8,6 @@ const carsTableBody = document.getElementById('carsTableBody');
 const API_BASE_URL = 'http://localhost:5000/api';
 let cars = [];
 
-// Load cars from backend
 async function loadCarsFromBackend() {
     try {
         const response = await fetch(`${API_BASE_URL}/get-cars`, {
@@ -35,7 +34,6 @@ async function loadCarsFromBackend() {
     }
 }
 
-// Render cars in the table
 function renderCarsTable() {
     carsTableBody.innerHTML = '';
     
@@ -53,14 +51,12 @@ function renderCarsTable() {
         row.addEventListener('click', function() {
             const carName = row.cells[1].textContent;
             console.log('Clicked on:', carName);
-            // Add logic to view/edit car details
         });
         
         carsTableBody.appendChild(row);
     });
 }
 
-// Populate car search dropdown
 function populateCarSearch() {
     cars.forEach(car => {
         const option = document.createElement('option');
@@ -70,20 +66,124 @@ function populateCarSearch() {
     });
 }
 
-// Navigation to My Trips
 myTripsBtn.addEventListener('click', function() {
     console.log('Navigate to My Trips page');
     window.location.href = 'trips.html';
 });
 
-// Add button click handler
-addBtn.addEventListener('click', function() {
-    console.log('Add new car');
-    // Add logic to add a new car to the table
-    // Could open a modal or navigate to an add car page
+const modal = document.getElementById('addCarModal');
+const addCarDropdown = document.getElementById('addCarDropdown');
+
+document.addEventListener('DOMContentLoaded', function() {
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const confirmAddBtn = document.getElementById('confirmAddBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', function() {
+            closeAddCarModal();
+        });
+    }
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', function() {
+            closeAddCarModal();
+        });
+    }
+
+    if (confirmAddBtn) {
+        confirmAddBtn.addEventListener('click', async function() {
+            await handleAddCar();
+        });
+    }
+
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            closeAddCarModal();
+        }
+    });
 });
 
-// Car search filter
+addBtn.addEventListener('click', function() {
+    console.log('Opening add car modal');
+    openAddCarModal();
+});
+
+async function handleAddCar() {
+    const selectedCarId = addCarDropdown.value;
+    console.log('Selected car ID:', selectedCarId);
+    console.log('Available cars:', cars);
+    console.log('Dropdown HTML:', addCarDropdown.innerHTML);
+    
+    if (selectedCarId === '' || selectedCarId === undefined) {
+        alert('Please select a car');
+        return;
+    }
+    
+    const selectedCar = selectedCarId;
+    
+    if (!selectedCar) {
+        console.error('Selected car not found. Available cars:', cars);
+        alert('Car not found');
+        return;
+    }
+    
+    console.log('Adding car to user account:', selectedCar);
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/add-car`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                carId: selectedCar.id || selectedCar.carId,
+                carName: selectedCar.name || selectedCar.carName
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            console.log('Car added successfully');
+            alert('Car added successfully!');
+            closeAddCarModal();
+            loadCarsFromBackend();
+        } else {
+            alert('Error adding car: ' + data.error);
+            console.error('Failed to add car:', data.error);
+        }
+    } catch (error) {
+        console.error('Network error while adding car:', error);
+        alert('Error connecting to server. Please try again.');
+    }
+}
+
+function openAddCarModal() {
+    modal.style.display = 'block';
+    populateAddCarDropdown();
+}
+
+function closeAddCarModal() {
+    modal.style.display = 'none';
+    addCarDropdown.value = '';
+}
+
+function populateAddCarDropdown() {
+    addCarDropdown.innerHTML = '<option value="">Select a car</option>';
+    
+    console.log('Populating dropdown with cars:', cars);
+    
+    cars.forEach((car, index) => {
+        const option = document.createElement('option');
+        const carId = car.id || car.carId || index;
+        option.value = carId;
+        option.textContent = car.name || car.carName || 'Unknown Car';
+        console.log(`Adding option: value=${carId}, text=${option.textContent}`);
+        addCarDropdown.appendChild(option);
+    });
+}
+
 carSearch.addEventListener('change', function() {
     const selectedCarId = carSearch.value;
     console.log('Selected car ID:', selectedCarId);
@@ -111,7 +211,12 @@ carSearch.addEventListener('change', function() {
     }
 });
 
-// Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('Page loaded, loading cars from backend');
     loadCarsFromBackend();
+
+    setTimeout(() => {
+        console.log('Dropdown options:', addCarDropdown.innerHTML);
+        console.log('Cars array:', cars);
+    }, 1000);
 });
