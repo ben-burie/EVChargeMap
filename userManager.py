@@ -15,7 +15,7 @@ cursor = connection.cursor()
 
 def authenticate_user(username, password):
     # Fill in function to authenticate user against database - use stored procedure
-    # Return true/false depending on if authentication is successful
+    # Return true/false depending on if authentication is successful, also return user_ID for later use, example: (return true, user_ID)
     # If it is, set a user variable to be used for loading proper things later (trips, cars, etc.)
 
 

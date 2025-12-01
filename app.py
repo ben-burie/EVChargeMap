@@ -39,7 +39,7 @@ def calculate_stops():
 @app.route('/api/get-cars', methods=['POST'])
 def get_cars():
     try:
-        cars = tripStopManager.load_cars()
+        cars = carManager.load_cars()
         return jsonify({
             'success': True,
             'cars': cars
@@ -107,7 +107,7 @@ def login():
 
         print(username, password)
         
-        user = userManager.authenticate_user(username, password)
+        user, current_user = userManager.authenticate_user(username, password) #use current user for other functions
         
         if user:
             return jsonify({
