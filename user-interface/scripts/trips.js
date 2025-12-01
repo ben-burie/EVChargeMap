@@ -1,13 +1,11 @@
-// Sample trips data structure (empty initially)
 let trips = [];
+const API_BASE_URL = 'http://localhost:5000/api';
 
-// Function to render trips table
 function renderTrips() {
     const tableBody = document.getElementById('tripsTableBody');
     tableBody.innerHTML = '';
 
     if (trips.length === 0) {
-        // Show empty state or just leave table empty
         return;
     }
 
@@ -19,7 +17,6 @@ function renderTrips() {
             <td>${trip.endLocation}</td>
         `;
         
-        // Add click handler to view/edit trip
         row.addEventListener('click', () => {
             viewTrip(trip.id);
         });
@@ -28,7 +25,6 @@ function renderTrips() {
     });
 }
 
-// Function to add a new trip (modular)
 function addTrip(tripData) {
     trips.push({
         id: tripData.id,
@@ -38,37 +34,54 @@ function addTrip(tripData) {
     renderTrips();
 }
 
-// Function to view/edit a specific trip
 function viewTrip(tripId) {
     console.log(`Viewing trip ${tripId}`);
     // Navigate to trip detail/edit page
     // window.location.href = `trip-detail.html?id=${tripId}`;
 }
 
-// Event Listeners
+async function loadTripsFromBackend() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/get-trips`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            trips = data.trips;
+            console.log('Trips loaded from backend:', trips);
+            renderTrips();
+        } else {
+            console.error('Failed to load trips:', data.error);
+            alert('Error loading trips: ' + data.error);
+        }
+    } catch (error) {
+        console.error('Network error while loading trips:', error);
+        alert('Error connecting to server. Please try again.');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Render initial trips (empty)
+    loadTripsFromBackend();
     renderTrips();
 
-    // Create New Trip button
     document.getElementById('createNewTripBtn').addEventListener('click', () => {
         console.log('Create new trip clicked');
-        // Navigate to create trip page
-        // window.location.href = 'create-trip.html';
+        window.location.href = 'tripStop.html';
     });
 
-    // My Cars button
     document.getElementById('myCarsBtn').addEventListener('click', () => {
         console.log('My Cars clicked');
-        // Navigate to cars page
-        // window.location.href = 'cars.html';
+        window.location.href = 'cars.html';
     });
 
-    // Log Out button
     document.getElementById('logOutBtn').addEventListener('click', () => {
         console.log('Log out clicked');
-        // Handle logout logic
-        // window.location.href = 'index.html';
+        window.location.href = 'logon.html';
     });
 });
 

@@ -78,6 +78,15 @@ def create_trip():
 def get_trips():
     try: 
         trips = tripManager.load_user_trips()
+
+        formatted_trips = []
+        for trip in trips:
+            formatted_trips.append({
+                'id': trip.get('id') or trip.get('trip_id'),
+                'startLocation': trip.get('startLocation') or trip.get('start_location'),
+                'endLocation': trip.get('endLocation') or trip.get('end_location')
+            })
+
         return jsonify({
             'success': True,
             'trips': trips
@@ -95,6 +104,8 @@ def login():
         data = request.json
         username = data.get('username')
         password = data.get('password')
+
+        print(username, password)
         
         user = userManager.authenticate_user(username, password)
         
@@ -121,6 +132,8 @@ def register():
         data = request.json
         username = data.get('username')
         password = data.get('password')
+
+        print(username, password)
         
         result = userManager.register_user(username, password)
         

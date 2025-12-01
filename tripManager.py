@@ -60,5 +60,10 @@ def load_user_trips():
     trips = []
 
     # Call stored procedure to load trips for the userID that is logged in currently
+    # Properties needed: trip id, start location, end location
+
+    trips.append({'id': 1, 'startLocation': 'Location A', 'endLocation': 'Location B'})
+    trips.append({'id': 2, 'startLocation': 'Location C', 'endLocation': 'Location D'})
+    trips.append({'id': 4, 'startLocation': 'Location E', 'endLocation': 'Location F'})
 
     return trips
