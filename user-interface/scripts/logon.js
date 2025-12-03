@@ -58,8 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             });
 
+            console.log(response)
+
             const data = await response.json();
 
+            console.log(data)
             console.log(data.success);
 
             if (data.success) {
@@ -84,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const username = document.getElementById('newUsername').value.trim();
         const password = document.getElementById('newPassword').value.trim();
         const confirmPassword = document.getElementById('confirmPassword').value.trim();
+        const email = document.getElementById('newEmail').value.trim();
 
         // Validation
         if (!username || !password || !confirmPassword) {
@@ -112,7 +116,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({
                     username: username,
-                    password: password
+                    password: password,
+                    email: email
                 })
             });
 

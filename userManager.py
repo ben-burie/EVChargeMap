@@ -13,20 +13,20 @@ connection = mysql.connector.connect(
 
 cursor = connection.cursor()
 
-def authenticate_user(username, password):
-    # Fill in function to authenticate user against database - use stored procedure
-    # Return true/false depending on if authentication is successful, also return user_ID for later use, example: (return true, user_ID)
-    # If it is, set a user variable to be used for loading proper things later (trips, cars, etc.)
+def authenticate_user(username, password):\
 
+    cursor.callproc('LoginProcedure', [username, password])
 
+    for result in cursor.stored_results():
+        rows = result.fetchall()
+        for row in rows:
+            if (row[1] != "" and row[3] != ""):
+                username = row[1]
+                return True, username
+    
+    return False, None
 
-
-    return
-
-def register_user(username, password):
-    # Fill in function to register user in database - use stored procedure
-
-
-
-
-    return
+def register_user(username, password, email):
+    cursor.callproc('CreateAccount', [username, email, password])
+    connection.commit()
+    return True

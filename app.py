@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
 # Import helper scripts
@@ -7,8 +7,17 @@ import carManager
 import tripManager
 import userManager
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='user-interface', static_url_path='')
 CORS(app)
+
+# Serve static files (HTML, CSS, JS)
+@app.route('/')
+def serve_index():
+    return send_from_directory('user-interface', 'logon.html')
+
+@app.route('/<path:filename>')
+def serve_static(filename):
+    return send_from_directory('user-interface', filename)
 
 @app.route('/api/calculate-stations', methods=['POST'])
 def calculate_stops():
@@ -126,12 +135,10 @@ def login():
         data = request.json
         username = data.get('username')
         password = data.get('password')
+        
+        success, user = userManager.authenticate_user(username, password) #use user for other functions (as the current user)
 
-        print(username, password)
-        
-        user, current_user = userManager.authenticate_user(username, password) #use current user for other functions
-        
-        if user:
+        if success:
             return jsonify({
                 'success': True,
                 'user': user
@@ -154,10 +161,9 @@ def register():
         data = request.json
         username = data.get('username')
         password = data.get('password')
-
-        print(username, password)
+        email = data.get('email')
         
-        result = userManager.register_user(username, password)
+        result = userManager.register_user(username, password, email)
         
         if result:
             return jsonify({
