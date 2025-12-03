@@ -1,6 +1,13 @@
 const map = L.map('map').setView([39.8283, -98.5795], 4);
 let allStops = []; // To store all stops fetched from Flask
 
+const user = JSON.parse(sessionStorage.getItem('user'));
+
+if (!user) {
+    alert('You must be logged in');
+    window.location.href = '/logon.html';
+}
+
 // Add OpenStreetMap tiles
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors',
@@ -12,7 +19,7 @@ let intermediateMarkers = [];
 let routeCoordinates = [];
 
 const STATION_ENDPOINT_URL = 'http://localhost:5000/api/calculate-stations';
-const CAR_ENDPOINT_URL = 'http://localhost:5000/api/get-cars';
+const CAR_ENDPOINT_URL = 'http://localhost:5000/api/get-user-cars';
 const TRIP_ENDPOINT_URL = 'http://localhost:5000/api/create-trip';
 
 // Function to geocode location name to coordinates
@@ -314,7 +321,9 @@ async function fetchCars() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({})
+            body: JSON.stringify({
+                userId: user
+            })
         });
 
         const data = await response.json();
@@ -418,7 +427,8 @@ async function createTrip() {
         })),
         car: selectedCar,
         total_stops: tripStops.length,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
+        userId: user
     };
 
     try {

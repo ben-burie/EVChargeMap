@@ -17,7 +17,7 @@ def saveTrip(trip_data):
     car_id = getCarID(trip_data.get('car'))
 
     result = cursor.callproc('CreateTrip', [
-        1, # Mock user ID
+        trip_data.get('userId'), # user ID
         car_id,
         trip_data.get('name'), # Mock trip name
         trip_data.get('start_location').get('location'), #start location

@@ -59,19 +59,38 @@ def get_cars():
             'error': str(e)
         }), 400
     
+@app.route('/api/get-user-cars', methods=['POST'])
+def get_user_cars():
+    data = request.json
+    user_id = data.get('userId')
+    try:
+        cars = carManager.load_user_cars(user_id)
+        return jsonify({
+            'success': True,
+            'cars': cars
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    
 @app.route('/api/add-car', methods=['POST'])
 def add_car():
     try:
         data = request.json
-        car_name = data.get('name')
+        car_id = data.get('carId')
+        user_id = data.get('userId')
 
-        carManager.save_car(car_name)
+        print(car_id, user_id)
+
+        carManager.save_car(car_id, user_id)
         
         return jsonify({
             'success': True,
             'message': 'Car added successfully',
             'car': {
-                'name': car_name
+                'name': car_id
             }
         })
     

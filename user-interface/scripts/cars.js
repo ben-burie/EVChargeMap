@@ -1,12 +1,20 @@
 // Get DOM elements
 const myTripsBtn = document.getElementById('myTripsBtn');
 const addBtn = document.getElementById('addBtn');
-const carSearch = document.getElementById('carSearch');
+const carSearch = document.getElementById('addCarDropdown');
 const carsTable = document.getElementById('carsTable');
 const carsTableBody = document.getElementById('carsTableBody');
 
+const user = JSON.parse(sessionStorage.getItem('user'));
+
+if (!user) {
+    alert('You must be logged in');
+    window.location.href = '/logon.html';
+}
+
 const API_BASE_URL = 'http://localhost:5000/api';
 let cars = [];
+let user_cars = [];
 
 async function loadCarsFromBackend() {
     try {
@@ -22,8 +30,35 @@ async function loadCarsFromBackend() {
         if (data.success) {
             cars = data.cars;
             console.log('Cars loaded from backend:', cars);
-            renderCarsTable();
+            //renderCarsTable();
             populateCarSearch();
+        } else {
+            console.error('Failed to load cars:', data.error);
+            alert('Error loading cars: ' + data.error);
+        }
+    } catch (error) {
+        console.error('Network error while loading cars:', error);
+        alert('Error connecting to server. Please try again.');
+    }
+}
+
+async function loadUserCars() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/get-user-cars`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: user
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            user_cars = data.cars;
+            renderCarsTable();
         } else {
             console.error('Failed to load cars:', data.error);
             alert('Error loading cars: ' + data.error);
@@ -37,11 +72,11 @@ async function loadCarsFromBackend() {
 function renderCarsTable() {
     carsTableBody.innerHTML = '';
     
-    if (cars.length === 0) {
+    if (user_cars.length === 0) {
         return;
     }
     
-    cars.forEach((car, index) => {
+    user_cars.forEach((car, index) => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${index + 1}</td>
@@ -120,7 +155,7 @@ async function handleAddCar() {
         return;
     }
     
-    const selectedCar = selectedCarId;
+    const selectedCar = parseInt(selectedCarId) + 1;
     
     if (!selectedCar) {
         console.error('Selected car not found. Available cars:', cars);
@@ -137,8 +172,8 @@ async function handleAddCar() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                carId: selectedCar.id || selectedCar.carId,
-                carName: selectedCar.name || selectedCar.carName
+                carId: selectedCar,
+                userId: user
             })
         });
 
@@ -149,6 +184,7 @@ async function handleAddCar() {
             alert('Car added successfully!');
             closeAddCarModal();
             loadCarsFromBackend();
+            renderCarsTable();
         } else {
             alert('Error adding car: ' + data.error);
             console.error('Failed to add car:', data.error);
@@ -214,6 +250,7 @@ carSearch.addEventListener('change', function() {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Page loaded, loading cars from backend');
     loadCarsFromBackend();
+    loadUserCars();
 
     setTimeout(() => {
         console.log('Dropdown options:', addCarDropdown.innerHTML);

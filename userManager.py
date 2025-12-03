@@ -21,8 +21,8 @@ def authenticate_user(username, password):\
         rows = result.fetchall()
         for row in rows:
             if (row[1] != "" and row[3] != ""):
-                username = row[1]
-                return True, username
+                user_ID = row[0]
+                return True, user_ID
     
     return False, None
 
