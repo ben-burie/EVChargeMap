@@ -457,7 +457,7 @@ async function createTrip() {
         document.getElementById('car-select').value = '';
         document.getElementById('trip-name').value = '';
         renderStops();
-
+        window.location.href = 'trips.html';
     } catch (error) {
         console.error('Error creating trip:', error);
         alert('Error creating trip: ' + error.message);

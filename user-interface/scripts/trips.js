@@ -1,6 +1,13 @@
 let trips = [];
 const API_BASE_URL = 'http://localhost:5000/api';
 
+const user = JSON.parse(sessionStorage.getItem('user'));
+
+if (!user) {
+    alert('You must be logged in');
+    window.location.href = '/logon.html';
+}
+
 function renderTrips() {
     const tableBody = document.getElementById('tripsTableBody');
     tableBody.innerHTML = '';
@@ -13,6 +20,7 @@ function renderTrips() {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${trip.id}</td>
+            <td>${trip.name}</td>
             <td>${trip.startLocation}</td>
             <td>${trip.endLocation}</td>
         `;
@@ -46,7 +54,10 @@ async function loadTripsFromBackend() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
+            body: JSON.stringify({
+                userID: user
+            })
         });
 
         const data = await response.json();
@@ -88,10 +99,3 @@ document.addEventListener('DOMContentLoaded', () => {
 function openTripStop() {
     window.location.href = 'tripStop.html';
 }
-
-// Example of how to add trips programmatically (for future use)
-// addTrip({
-//     id: '43521',
-//     startLocation: 'Seattle, WA',
-//     endLocation: 'Miami, FL'
-// });

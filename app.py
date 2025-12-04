@@ -127,14 +127,17 @@ def create_trip():
 @app.route('/api/get-trips', methods=['POST'])
 def get_trips():
     try: 
-        trips = tripManager.load_user_trips()
+        data = request.json
+        userID = data.get('userID')
+        trips = tripManager.load_user_trips(userID)
 
         formatted_trips = []
         for trip in trips:
             formatted_trips.append({
-                'id': trip.get('id') or trip.get('trip_id'),
-                'startLocation': trip.get('startLocation') or trip.get('start_location'),
-                'endLocation': trip.get('endLocation') or trip.get('end_location')
+                'id': trip.get('trip_ID'),
+                'name': trip.get('name'),
+                'startLocation': trip.get('startLocation'),
+                'endLocation': trip.get('endLocation')
             })
 
         return jsonify({

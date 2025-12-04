@@ -56,14 +56,27 @@ def getCarID(car_name):
                         car_id = rows[0][0]
     return car_id
 
-def load_user_trips():
+def load_user_trips(userID):
     trips = []
 
     # Call stored procedure to load trips for the userID that is logged in currently
     # Properties needed: trip id, start location, end location
 
-    trips.append({'id': 1, 'startLocation': 'Location A', 'endLocation': 'Location B'})
-    trips.append({'id': 2, 'startLocation': 'Location C', 'endLocation': 'Location D'})
-    trips.append({'id': 4, 'startLocation': 'Location E', 'endLocation': 'Location F'})
+    cursor.callproc('GetUserTrips', [userID])
+    for result in cursor.stored_results():
+        rows = result.fetchall()
+        for row in rows:
+            print(row)
+            trips.append({
+                'id': row[0],
+                'name': row[3],
+                'startLocation': row[4],
+                'endLocation': row[5]
+            })
+
+    print(f"Loaded {len(trips)} trips for user {userID}")
+    #trips.append({'id': 1, 'startLocation': 'Location A', 'endLocation': 'Location B'})
+    #trips.append({'id': 2, 'startLocation': 'Location C', 'endLocation': 'Location D'})
+    #trips.append({'id': 4, 'startLocation': 'Location E', 'endLocation': 'Location F'})
 
     return trips
