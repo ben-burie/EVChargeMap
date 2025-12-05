@@ -230,6 +230,8 @@ async function searchRoute(event) {
         }
     }).addTo(map);
 
+    getRouteMileage();
+
     // Fit map to show entire route
     const bounds = L.latLngBounds(
         [startLocation.lat, startLocation.lng],
@@ -248,8 +250,6 @@ async function searchRoute(event) {
         lat: endLocation.lat,
         lng: endLocation.lng
     };
-
-    messageDiv.innerHTML = '<div class="message success">Route displayed with stops!</div>';
 }
 
 // Allow Enter key to trigger search
@@ -259,6 +259,23 @@ document.getElementById('end-location').addEventListener('keypress', function(ev
     }
 });
 
+function getRouteMileage() {
+    if (!routeControl) {
+        console.error('No route available');
+        return null;
+    }
+    
+    routeControl.on('routesfound', function(e) {
+        const routes = e.routes;
+        if (routes.length > 0) {
+            const distanceInMeters = routes[0].summary.totalDistance;
+            const distanceInMiles = Math.round((distanceInMeters * 0.000621371).toFixed(2));
+            localStorage.setItem('mileage', distanceInMiles);
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = `<div class="message success">Route displayed! Distance: ${distanceInMiles} miles</div>`;
+        }
+    });
+}
 
 // STATION TABLE LOGIC BELOW
 const tripStops = [];
@@ -356,18 +373,35 @@ async function initializeCars() {
     });
 }
 
-function saveCar() {
+async function saveCar() {
     const select = document.getElementById('car-select');
     const selectedValue = select.value;
+    const carRangeDiv = document.getElementById('car-range');
 
     if (!selectedValue) {
-        alert('Please select a car');
+        carRangeDiv.innerHTML = '<div class="message success">Please select a car</div>';
         return;
     }
 
+    let mileage = localStorage.getItem('mileage');
+    let suggestedNumStops = 'N/A';
+    cars = await fetchCars();
     selectedCar = selectedValue;
-    console.log('Car saved:', selectedCar);
-    alert('Car saved: ' + selectedCar);
+    let carRange = Math.round((cars.find(car => {if (car.name == selectedCar) return car}).range)*0.621371);
+
+    if (mileage) {
+        if (mileage <= carRange) {
+            suggestedNumStops = 0;
+        }
+        else {
+            suggestedNumStops = Math.ceil(mileage / carRange) + 1;
+        }
+    }
+    else {
+        suggestedNumStops = 'Please enter a route to calculate stops';
+    }
+    carRangeDiv.innerHTML = `<div class="message success">Mileage range on a full charge: ${carRange} miles<br>
+        Suggested number of stops: ${suggestedNumStops}</div>`;
 }
 
 // Initialize cars on page load
@@ -463,3 +497,11 @@ async function createTrip() {
         alert('Error creating trip: ' + error.message);
     }
 }
+
+function goBack() {
+    window.location.href = 'trips.html';
+}
+
+window.onload = function() {
+    this.localStorage.removeItem('mileage');
+};

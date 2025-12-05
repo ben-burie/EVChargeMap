@@ -38,8 +38,6 @@ def load_user_cars(user_id):
         rows = result.fetchall()
         for row in rows:
             car = row[0] + " " + row[1]
-            cars.append({'name': car})
-
-    print(f"Loaded {len(cars)} cars for user {user_id}")
+            cars.append({'name': car, 'range': row[4]})
 
     return cars

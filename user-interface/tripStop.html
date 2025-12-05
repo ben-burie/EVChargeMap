@@ -14,6 +14,7 @@
     <div class="container">
         <div class="header">
             <h2>Create Trip</h2>
+            <button id="goBack" onclick=goBack()>Back</button>
         </div>
         
         <div class="content">
@@ -31,6 +32,17 @@
                     <div id="message"></div>
                 </div>
                 <div class="left-section">
+                    <!-- car form goes here -->
+                     <div class="car-form-container">
+                        <div class="car-form-group">
+                            <label for="car-select">Car:</label>
+                            <select id="car-select">
+                                <option value="">Select a car...</option>
+                            </select>
+                            <button onclick="saveCar()">Save</button>
+                        </div>
+                        <div id="car-range"></div>
+                    </div>
                     <!-- stops table goes here -->
                      <div class="stops-container">
                         <div class="stops-input-group">
@@ -54,16 +66,6 @@
                             <!-- stops will be added here dynamically -->
                         </tbody>
                     </table>
-                    </div>
-                    <!-- car form goes here -->
-                     <div class="car-form-container">
-                        <div class="car-form-group">
-                            <label for="car-select">Car:</label>
-                            <select id="car-select">
-                                <option value="">Select a car...</option>
-                            </select>
-                            <button onclick="saveCar()">Save</button>
-                        </div>
                     </div>
                     <div class="save-trip">
                         <input type="text" id="trip-name" placeholder="Enter trip name" required>

@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    this.sessionStorage.removeItem('user');
+
     const loginTab = document.getElementById('loginTab');
     const createTab = document.getElementById('createTab');
     const loginForm = document.getElementById('loginForm');
@@ -66,8 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(data.success);
 
             if (data.success) {
-                console.log('Login successful:', data.user);
-                alert(`Welcome back, ${username}!`);
                 sessionStorage.setItem('user', JSON.stringify(data.user));
                 window.location.href = '/trips.html';
             } else {

@@ -81,6 +81,7 @@ function renderCarsTable() {
         row.innerHTML = `
             <td>${index + 1}</td>
             <td>${car.name || car.carName || 'Unknown Car'}</td>
+            <td>${Math.round((car.range)*0.621371) || 'N/A'} miles</td>
         `;
         
         row.addEventListener('click', function() {
@@ -180,8 +181,6 @@ async function handleAddCar() {
         const data = await response.json();
 
         if (data.success) {
-            console.log('Car added successfully');
-            alert('Car added successfully!');
             closeAddCarModal();
             loadCarsFromBackend();
             renderCarsTable();

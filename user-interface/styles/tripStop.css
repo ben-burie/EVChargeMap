@@ -21,6 +21,12 @@ body {
     background-color: white;
 }
 
+#goBack {
+    position: absolute;
+    right: 15px;
+    top: 0;
+}
+
 .header h2 {
     font-size: 24px;
     font-weight: bold;
@@ -50,12 +56,14 @@ body {
 
 .left-section:last-child {
     border-bottom: none;
+    flex: 2;
 }
 
 form {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    margin-bottom: 0;
 }
 
 label {
@@ -223,7 +231,7 @@ button:hover, .stops-input-group button:hover {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-top: 50px;
+    margin-bottom: 30px;
 }
 
 .car-form-group {
