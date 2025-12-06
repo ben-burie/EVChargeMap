@@ -39,6 +39,33 @@
         </div>
     </div>
 
+        <div class="modal-overlay" id="tripModalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">Trip Details</div>
+                <div class="modal-car" id="modalCar">Selected car: </div>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Stop Number</th>
+                            <th>Station Name</th>
+                            <th>Station City</th>
+                            <th>Station State</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stopsTableBody">
+                        <!-- Rows will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="close-btn" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
     <script src="scripts/trips.js"></script>
 
 </body>

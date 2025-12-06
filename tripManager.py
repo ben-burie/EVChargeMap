@@ -59,9 +59,6 @@ def getCarID(car_name):
 def load_user_trips(userID):
     trips = []
 
-    # Call stored procedure to load trips for the userID that is logged in currently
-    # Properties needed: trip id, start location, end location
-
     cursor.callproc('GetUserTrips', [userID])
     for result in cursor.stored_results():
         rows = result.fetchall()
@@ -74,9 +71,27 @@ def load_user_trips(userID):
                 'endLocation': row[5]
             })
 
-    print(f"Loaded {len(trips)} trips for user {userID}")
-    #trips.append({'id': 1, 'startLocation': 'Location A', 'endLocation': 'Location B'})
-    #trips.append({'id': 2, 'startLocation': 'Location C', 'endLocation': 'Location D'})
-    #trips.append({'id': 4, 'startLocation': 'Location E', 'endLocation': 'Location F'})
-
     return trips
+
+def load_trip_stops(tripID):
+    stops = []
+    car_name = None
+
+    cursor.callproc('GetTripStops', [tripID])
+    for result in cursor.stored_results():
+        rows = result.fetchall()
+        for idx, row in enumerate(rows):
+            if idx == 0:
+                car_name = row[5] + ' ' + row[6]
+            
+            stops.append({
+                'stopNumber': row[1],
+                'stationName': row[2],
+                'city': row[3],
+                'state': row[4]
+            })
+
+    return {
+        'carName': car_name or 'Unknown',
+        'stops': stops
+    }

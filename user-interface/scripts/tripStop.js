@@ -481,7 +481,7 @@ async function createTrip() {
             return;
         }
 
-        alert('Trip created successfully!');
+        //alert('Trip created successfully!');
         
         // Reset trip data
         tripStops.length = 0;

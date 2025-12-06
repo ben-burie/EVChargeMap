@@ -151,6 +151,26 @@ def get_trips():
             'error': str(e)
         }), 400
     
+@app.route('/api/get-trip-details', methods=['POST'])
+def get_trip_details():
+    try:
+        data = request.json
+        trip_id = data.get('tripId')
+        
+        trip_info = tripManager.load_trip_stops(trip_id)
+        
+        return jsonify({
+            'success': True,
+            'trip': trip_info
+        })
+
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+    
 @app.route('/api/login', methods=['POST'])
 def login():
     try:

@@ -42,11 +42,72 @@ function addTrip(tripData) {
     renderTrips();
 }
 
-function viewTrip(tripId) {
+
+async function viewTrip(tripId) {
     console.log(`Viewing trip ${tripId}`);
-    // Navigate to trip detail/edit page
-    // window.location.href = `trip-detail.html?id=${tripId}`;
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/get-trip-details`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                tripId: tripId
+            })
+        });
+
+        const data = await response.json();
+
+        if (!data.success) {
+            console.error('Failed to load trip details:', data.error);
+            alert('Error loading trip details: ' + data.error);
+            return;
+        }
+
+        const trip = data.trip;
+
+        document.getElementById("modalTitle").textContent = `Trip Details`;
+        document.getElementById("modalCar").textContent = `Selected car: ${trip.carName || 'N/A'}`;
+
+        const tableBody = document.getElementById("stopsTableBody");
+        tableBody.innerHTML = ""; 
+
+        if (trip.stops && trip.stops.length > 0) {
+            trip.stops.forEach(stop => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${stop.stopNumber}</td>
+                    <td>${stop.stationName}</td>
+                    <td>${stop.city}</td>
+                    <td>${stop.state}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        } else {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td colspan="4">No stops found for this trip</td>`;
+            tableBody.appendChild(row);
+        }
+
+        document.getElementById("tripModalOverlay").classList.add("active");
+
+    } catch (error) {
+        console.error('Network error while loading trip details:', error);
+        alert('Error connecting to server. Please try again.');
+    }
 }
+
+function closeModal() {
+    document.getElementById("tripModalOverlay").classList.remove("active");
+}
+
+document.getElementById("tripModalOverlay").addEventListener("click", function(e) {
+    if (e.target === this) {
+        closeModal();
+    }
+});
+
 
 async function loadTripsFromBackend() {
     try {
