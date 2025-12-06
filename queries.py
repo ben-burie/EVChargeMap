@@ -1,6 +1,7 @@
 import mysql.connector
 from dotenv import load_dotenv
 import os
+import time
 
 load_dotenv()
 
@@ -149,28 +150,52 @@ big_queries = [
 ]
 
 def execute_query(query, title):
+    start_time = time.time()
     cursor.execute(query)
+    results = cursor.fetchall()
+    end_time = time.time()
+    elapsed_time = end_time - start_time
     print(f"\n--- {title} ---\n")
-    for result in cursor.fetchall():
+    for result in results:
         print(result)
+
+    print("\nElapsed time: " + str(round(elapsed_time, 5)) + " seconds")
 
 def execute_query_with_user_ID_param(query, user_ID, title):
+    start_time = time.time()
     cursor.execute(query, (user_ID,))
+    results = cursor.fetchall()
+    end_time = time.time()
+    elapsed_time = end_time - start_time
     print(f"\n--- {title} ---\n")
-    for result in cursor.fetchall():
+    for result in results:
         print(result)
+
+    print("\nElapsed time: " + str(round(elapsed_time, 5)) + " seconds")
 
 def execute_query_with_multiple_params(query, params, title):
+    start_time = time.time()
     cursor.execute(query, params)
+    results = cursor.fetchall()
+    end_time = time.time()
+    elapsed_time = end_time - start_time
     print(f"\n--- {title} ---\n")
-    for result in cursor.fetchall():
+    for result in results:
         print(result)
+    
+    print("\nElapsed time: " + str(round(elapsed_time, 5)) + " seconds")
 
 def execute_big_queries(query, title):
+    start_time = time.time()
     cursor.execute(query)
+    results = cursor.fetchall()
+    end_time = time.time()
+    elapsed_time = end_time - start_time
     print(f"\n--- {title} ---\n")
-    for result in cursor.fetchall():
+    for result in results:
         print(result)
+    
+    print("\nElapsed time: " + str(round(elapsed_time, 5)) + " seconds")
 
 if __name__ == "__main__":
     print("----- Select which query to execute ----------")

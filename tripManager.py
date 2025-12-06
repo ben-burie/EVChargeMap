@@ -63,7 +63,6 @@ def load_user_trips(userID):
     for result in cursor.stored_results():
         rows = result.fetchall()
         for row in rows:
-            print(row)
             trips.append({
                 'id': row[0],
                 'name': row[3],

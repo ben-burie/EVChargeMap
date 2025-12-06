@@ -45,6 +45,7 @@ body {
     transition: background-color 0.2s;
     position: absolute;
     right: 20px;
+    border-radius: 8px;
 }
 
 .btn-secondary {
@@ -98,6 +99,7 @@ body {
     font-size: 14px;
     font-weight: bold;
     transition: background-color 0.2s;
+    border-radius: 8px;
 }
 
 .btn-add:hover {
@@ -234,10 +236,10 @@ body {
 }
 
 .modal-footer .btn-primary {
-    background-color: #6f42c1;
-    color: white;
+    background-color: #c8b3e6;
+    color: black;
 }
 
 .modal-footer .btn-primary:hover {
-    background-color: #5a32a3;
+    background-color: #b8a3d6;
 }

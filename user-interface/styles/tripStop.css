@@ -94,6 +94,7 @@ button, .stops-input-group button {
     font-size: 14px;
     font-weight: bold;
     margin-top: 10px;
+    transition: background-color 0.2s;
 }
 
 .stops-input-group button {
@@ -101,7 +102,8 @@ button, .stops-input-group button {
 }
 
 button:hover, .stops-input-group button:hover {
-    background-color: #9863a8;
+    background-color: #c9a8d8;
+    transition: background-color 0.2s;
 }
 
 .message {
@@ -271,10 +273,12 @@ button:hover, .stops-input-group button:hover {
     font-size: 14px;
     font-weight: bold;
     margin-top: 0;
+    transition: background-color 0.2s;
 }
 
 .car-form-group button:hover {
     background-color: #c9a8d8;
+    transition: background-color 0.2s;
 }
 
 .save-trip {
