@@ -211,41 +211,59 @@ if __name__ == "__main__":
     print("10. Stations not yet visited by a user in a given state")
     print("11. Nearest stations to a coordinate")
     print("12. Show trip history with charging summary")
+    print("13. Exit")
 
     choice = int(input("\nSelect an option from menu above: "))
-    while (choice < 1 or choice > 12):
-        choice = int(input("Invalid choice...please select again: "))
+    while (choice != 13):
+        match choice:
+            case 1:
+                execute_big_queries(big_queries[1][0], big_queries[1][1])
+            case 2:
+                execute_big_queries(big_queries[0][0], big_queries[0][1])
+            case 3:
+                user_ID = input("\nEnter user ID: ")
+                execute_query_with_user_ID_param(user_ID_queries[0][0], user_ID, user_ID_queries[0][1])
+            case 4:
+                execute_query(queries[5][0], queries[5][1])
+            case 5:
+                execute_query(queries[4][0], queries[4][1])
+            case 6:
+                execute_query(queries[6][0], queries[6][1])
+            case 7:
+                user_ID = input("\nEnter user ID: ")
+                execute_query_with_user_ID_param(user_ID_queries[1][0], user_ID, user_ID_queries[1][1])
+            case 8:
+                execute_query(queries[2][0], queries[2][1])
+            case 9:
+                execute_query(queries[7][0], queries[7][1])
+            case 10:
+                state = input("\nEnter state abbreviation (e.g 'WI'): ")
+                user_ID = input("\nEnter user ID: ")
+                execute_query_with_multiple_params(user_ID_queries[2][0], (state, user_ID), user_ID_queries[2][1])
+            case 11:
+                lat = float(input("\nEnter latitude: "))
+                lon = float(input("\nEnter longitude: "))
+                limit = int(input("\nHow many nearest stations to select: "))
+                execute_query_with_multiple_params(user_ID_queries[3][0], (lat, lat, lon, limit), user_ID_queries[3][1])
+            case 12:
+                user_ID = input("\nEnter user ID: ")
+                execute_query_with_user_ID_param(user_ID_queries[4][0], user_ID, user_ID_queries[4][1])
 
-    match choice:
-        case 1:
-            execute_big_queries(big_queries[1][0], big_queries[1][1])
-        case 2:
-            execute_big_queries(big_queries[0][0], big_queries[0][1])
-        case 3:
-            user_ID = input("\nEnter user ID: ")
-            execute_query_with_user_ID_param(user_ID_queries[0][0], user_ID, user_ID_queries[0][1])
-        case 4:
-            execute_query(queries[5][0], queries[5][1])
-        case 5:
-            execute_query(queries[4][0], queries[4][1])
-        case 6:
-            execute_query(queries[6][0], queries[6][1])
-        case 7:
-            user_ID = input("\nEnter user ID: ")
-            execute_query_with_user_ID_param(user_ID_queries[1][0], user_ID, user_ID_queries[1][1])
-        case 8:
-            execute_query(queries[2][0], queries[2][1])
-        case 9:
-            execute_query(queries[7][0], queries[7][1])
-        case 10:
-            state = input("\nEnter state abbreviation (e.g 'WI'): ")
-            user_ID = input("\nEnter user ID: ")
-            execute_query_with_multiple_params(user_ID_queries[2][0], (state, user_ID), user_ID_queries[2][1])
-        case 11:
-            lat = float(input("\nEnter latitude: "))
-            lon = float(input("\nEnter longitude: "))
-            limit = int(input("\nHow many nearest stations to select: "))
-            execute_query_with_multiple_params(user_ID_queries[3][0], (lat, lat, lon, limit), user_ID_queries[3][1])
-        case 12:
-            user_ID = input("\nEnter user ID: ")
-            execute_query_with_user_ID_param(user_ID_queries[4][0], user_ID, user_ID_queries[4][1])
+        print("\n----- Select which query to execute ----------")
+        print("1. Get all US stations")
+        print("2. Get all cars")
+        print("3. Get all stations visited by a specific user")
+        print("4. Get the longest trip")
+        print("5. Find users with more than one car")
+        print("6. Find cars with an above average mileage range")
+        print("7. Trips for a user with number of stops")
+        print("8. Most popular stations (by distinct trips that used them)")
+        print("9. Average trip length per user")
+        print("10. Stations not yet visited by a user in a given state")
+        print("11. Nearest stations to a coordinate")
+        print("12. Show trip history with charging summary")
+        print("13. Exit")
+
+        choice = int(input("\nSelect an option from menu above: "))
+        while (choice < 1 or choice > 13):
+            choice = int(input("Invalid choice...please select again: "))
