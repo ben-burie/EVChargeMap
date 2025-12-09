@@ -17,13 +17,11 @@ def test_connection():
         db_info = connection.get_server_info()
         print(f"✓ Successfully connected to MySQL Server version {db_info}")
         
-        # Get cursor and run a test query
         cursor = connection.cursor()
         cursor.execute("SELECT DATABASE();")
         record = cursor.fetchone()
         print(f"✓ Connected to database: {record[0]}")
         
-        # Show tables in the database
         cursor.execute("SHOW TABLES;")
         tables = cursor.fetchall()
         print(f"\n✓ Tables in database ({len(tables)} found):")

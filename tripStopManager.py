@@ -46,7 +46,6 @@ def load_stations():
 def distance_point_to_line(point_lat, point_lng, line_start_lat, line_start_lng, line_end_lat, line_end_lng):
     km_per_degree = 111.0
     
-    # Convert to cartesian coordinates
     px = (point_lng - line_start_lng) * km_per_degree * math.cos(math.radians((line_start_lat + point_lat) / 2))
     py = (point_lat - line_start_lat) * km_per_degree
     
@@ -55,18 +54,14 @@ def distance_point_to_line(point_lat, point_lng, line_start_lat, line_start_lng,
     x2 = (line_end_lng - line_start_lng) * km_per_degree * math.cos(math.radians((line_start_lat + line_end_lat) / 2))
     y2 = (line_end_lat - line_start_lat) * km_per_degree
     
-    # Calculate distance from point to line segment
     if x2 == 0 and y2 == 0:
         return math.sqrt(px**2 + py**2)
     
-    # Parameter t represents position along line (0 = start, 1 = end)
     t = max(0, min(1, (px * x2 + py * y2) / (x2**2 + y2**2)))
     
-    # Closest point on line segment
     closest_x = t * x2
     closest_y = t * y2
     
-    # Distance from point to closest point on line
     distance = math.sqrt((px - closest_x)**2 + (py - closest_y)**2)
     
     return distance
@@ -74,7 +69,6 @@ def distance_point_to_line(point_lat, point_lng, line_start_lat, line_start_lng,
 def calculate_intermediate_points(start_lat, start_lng, end_lat, end_lng):
     points = []
     
-    # Add start point
     points.append({
         'lat': start_lat,
         'lng': start_lng,
@@ -99,8 +93,6 @@ def calculate_intermediate_points(start_lat, start_lng, end_lat, end_lng):
                 'distance': round(distance, 2)
             })
 
-    
-    # Add end point
     points.append({
         'lat': end_lat,
         'lng': end_lng,

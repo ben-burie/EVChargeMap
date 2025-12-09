@@ -140,7 +140,6 @@ button:hover, .stops-input-group button:hover {
     height: 100%;
 }
 
-/* Hide all routing UI elements */
 .leaflet-routing-container {
     display: none !important;
 }

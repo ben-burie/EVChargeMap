@@ -30,7 +30,6 @@ async function loadCarsFromBackend() {
         if (data.success) {
             cars = data.cars;
             console.log('Cars loaded from backend:', cars);
-            //renderCarsTable();
             populateCarSearch();
         } else {
             console.error('Failed to load cars:', data.error);

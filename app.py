@@ -10,7 +10,6 @@ import userManager
 app = Flask(__name__, static_folder='user-interface', static_url_path='')
 CORS(app)
 
-# Serve static files (HTML, CSS, JS)
 @app.route('/')
 def serve_index():
     return send_from_directory('user-interface', 'logon.html')
@@ -178,7 +177,7 @@ def login():
         username = data.get('username')
         password = data.get('password')
         
-        success, user = userManager.authenticate_user(username, password) #use user for other functions (as the current user)
+        success, user = userManager.authenticate_user(username, password)
 
         if success:
             return jsonify({

@@ -1,5 +1,5 @@
 const map = L.map('map').setView([39.8283, -98.5795], 4);
-let allStops = []; // To store all stops fetched from Flask
+let allStops = []; 
 
 const user = JSON.parse(sessionStorage.getItem('user'));
 
@@ -8,7 +8,6 @@ if (!user) {
     window.location.href = '/logon.html';
 }
 
-// Add OpenStreetMap tiles
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors',
     maxZoom: 19
@@ -22,7 +21,6 @@ const STATION_ENDPOINT_URL = 'http://localhost:5000/api/calculate-stations';
 const CAR_ENDPOINT_URL = 'http://localhost:5000/api/get-user-cars';
 const TRIP_ENDPOINT_URL = 'http://localhost:5000/api/create-trip';
 
-// Function to geocode location name to coordinates
 async function geocodeLocation(location) {
     try {
         const response = await fetch(
@@ -54,7 +52,6 @@ function extractRouteCoordinates(routeControl) {
         return [];
     }
     
-    // Get the route lines
     const routes = routeControl.getRoutes();
     
     if (routes.length === 0) {
@@ -62,7 +59,6 @@ function extractRouteCoordinates(routeControl) {
         return [];
     }
     
-    // Extract coordinates from all route segments
     routes.forEach((route, routeIndex) => {
         if (route.coordinates && route.coordinates.length > 0) {
             route.coordinates.forEach((coord) => {
@@ -78,7 +74,6 @@ function extractRouteCoordinates(routeControl) {
     return routeCoordinates;
 }
 
-// Function to fetch intermediate stops from Flask
 async function fetchIntermediateStops(startLat, startLng, endLat, endLng) {
     try {
         const response = await fetch(STATION_ENDPOINT_URL, {
@@ -101,7 +96,7 @@ async function fetchIntermediateStops(startLat, startLng, endLat, endLng) {
             return [];
         }
 
-        allStops = data.stops; // Store all stops for later use
+        allStops = data.stops;
         return data.stops;
     } catch (error) {
         console.error('Error fetching stops:', error);
@@ -109,13 +104,11 @@ async function fetchIntermediateStops(startLat, startLng, endLat, endLng) {
     }
 }
 
-// Function to clear intermediate markers
 function clearIntermediateMarkers() {
     intermediateMarkers.forEach(marker => map.removeLayer(marker));
     intermediateMarkers = [];
 }
 
-// Function to plot intermediate stops on map
 function plotIntermediateStops(stops) {
     clearIntermediateMarkers();
 
@@ -123,7 +116,6 @@ function plotIntermediateStops(stops) {
         let marker;
         
         if (stop.type === 'checkpoint') {
-            // Checkpoints as light blue circles
             marker = L.circleMarker([stop.lat, stop.lng], {
                 radius: 7,
                 fillColor: '#60a5fa',
@@ -134,7 +126,6 @@ function plotIntermediateStops(stops) {
             }).bindPopup(`${stop.name}`);
         } 
         else if (stop.type === 'station') {
-            // Stations as yellow/orange circles (larger)
             marker = L.circleMarker([stop.lat, stop.lng], {
                 radius: 9,
                 fillColor: '#fbbf24',
@@ -169,7 +160,6 @@ async function searchRoute(event) {
 
     messageDiv.innerHTML = '<div class="message success">Searching...</div>';
 
-    // Geocode both locations
     const startLocation = await geocodeLocation(startLocationInput);
     const endLocation = await geocodeLocation(endLocationInput);
 
@@ -183,29 +173,24 @@ async function searchRoute(event) {
         return;
     }
 
-    // Remove existing route if any
     if (routeControl) {
         map.removeControl(routeControl);
     }
 
-    // Clear existing intermediate markers
     clearIntermediateMarkers();
 
-    // Fetch intermediate stops from Flask
     const stops = await fetchIntermediateStops(
         startLocation.lat,
         startLocation.lng,
         endLocation.lat,
         endLocation.lng,
-        5 // Number of intermediate points
+        5
     );
 
-    // Plot intermediate stops
     if (stops.length > 0) {
         plotIntermediateStops(stops);
     }
 
-    // Create routing control with hidden panel
     routeControl = L.Routing.control({
         waypoints: [
             L.latLng(startLocation.lat, startLocation.lng),
@@ -232,7 +217,6 @@ async function searchRoute(event) {
 
     getRouteMileage();
 
-    // Fit map to show entire route
     const bounds = L.latLngBounds(
         [startLocation.lat, startLocation.lng],
         [endLocation.lat, endLocation.lng]
@@ -252,7 +236,6 @@ async function searchRoute(event) {
     };
 }
 
-// Allow Enter key to trigger search
 document.getElementById('end-location').addEventListener('keypress', function(event) {
     if (event.key === 'Enter') {
         searchRoute(event);
@@ -289,7 +272,6 @@ function addStop() {
         return;
     }
 
-    // Search through stops to find matching ID
     console.log(id);
     const station = allStops.find(stop => stop.id == id);
     if (station && tripStops.includes(station) === false) {
@@ -404,7 +386,6 @@ async function saveCar() {
         Suggested number of stops: ${suggestedNumStops}</div>`;
 }
 
-// Initialize cars on page load
 window.addEventListener('load', () => {
     initializeCars();
 });
@@ -480,8 +461,6 @@ async function createTrip() {
             alert('Error creating trip: ' + result.error);
             return;
         }
-
-        //alert('Trip created successfully!');
         
         // Reset trip data
         tripStops.length = 0;

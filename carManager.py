@@ -13,7 +13,7 @@ connection = mysql.connector.connect(
 
 cursor = connection.cursor()
 
-def load_cars(): # Change the stored procedure later so that it only pulls cars that the user owns
+def load_cars():
     cars = []
 
     cursor.callproc('LoadAllCars')
@@ -25,7 +25,7 @@ def load_cars(): # Change the stored procedure later so that it only pulls cars 
 
     return cars
 
-def save_car(car_id, user_id): # Save car to the database
+def save_car(car_id, user_id):
     cursor.callproc('AddCar', [user_id, car_id])
     connection.commit()
     return True
