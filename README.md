@@ -19,13 +19,13 @@ Pick an EV, enter start and end locations, and view charging stations along the 
 ## 🖼️ Screenshots
 
 ### **Login Page**  
-![Login Page](images/login.png)
+<img width="354" height="307" alt="image" src="https://github.com/user-attachments/assets/dc390474-c9e7-43eb-aa82-0f7d08b0ac9e" />
 
 ### **Trip Manager**  
-![Trip Manager](images/trip_planner.png)
+<img width="686" height="320" alt="image" src="https://github.com/user-attachments/assets/bbac1d6f-29e0-4822-b235-3875f2a47559" />
 
 ### **Station Map / Stops**  
-![Station Map](images/station_map.png)
+<img width="1234" height="538" alt="image" src="https://github.com/user-attachments/assets/a2d24e58-8e06-4d6c-b973-e91606d523ee" />
 
 ---
 
@@ -41,12 +41,12 @@ Pick an EV, enter start and end locations, and view charging stations along the 
 - MySQL
 
 **Other**  
-- REST API routes for users, cars, trips, and station lookups  
-- Stored procedures and optimized SQL queries for geospatial lookups
+- REST API routes for users, cars, trips, and station lookups.
+- Stored procedures and optimized SQL queries for geospatial lookups.
 
 ---
 
 ## 📦 Data Sources
 
-- Global EV Charging Stations Dataset: https://www.kaggle.com/datasets/tarekmasryo/global-ev-charging-stations/data?select=charging_station.csv
-- Electric Vehicle Specifications Dataset: https://www.kaggle.com/datasets/urvishahir/electric-vehicle-specifications-dataset-2025
+- [Global EV Charging Stations Dataset](https://www.kaggle.com/datasets/tarekmasryo/global-ev-charging-stations/data?select=charging_station.csv)
+- [Electric Vehicle Specifications Dataset](https://www.kaggle.com/datasets/urvishahir/electric-vehicle-specifications-dataset-2025)
